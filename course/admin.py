@@ -4,7 +4,7 @@ from .models import Course, Category, Tag
 
 class CategoryAdmin(admin.ModelAdmin):
     prepopulated_fields = {'slug': ('title',)}
-    list_display = ['slug', 'title', 'id']
+    list_display = ['title', 'slug', 'id']
 
 
 class CourseAdmin(admin.ModelAdmin):

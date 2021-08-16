@@ -26,6 +26,7 @@ First LMS site by Amit
 * course
     * Category
     * Course
+    * Tag
 * chapter
 * order
 * coupon
