@@ -24,7 +24,8 @@ First LMS site by Amit
 
 ## Apps
 * course
-    * model name
+    * Category
+    * Course
 * chapter
 * order
 * coupon
