@@ -1,8 +1,6 @@
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from rest_framework.views import APIView
-from rest_framework import status
-from rest_framework.parsers import JSONParser
+from rest_framework.generics import ListCreateAPIView
 
 from course.serializers import CategorySerializer
 from course.models import Category
@@ -17,20 +15,7 @@ def test_view(request):
     return Response(response)
 
 
-class CategoryListView(APIView):
+class CategoryListView(ListCreateAPIView):
 
-    def get(self, request):
-        categories = Category.objects.all()
-        serializer = CategorySerializer(categories, many=True)
-        return Response(serializer.data)
-
-    def post(self, request):
-        json = JSONParser().parse(request)
-        serializer = CategorySerializer(data=json)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        else:
-            return Response(
-                serializer.errors,
-                status=status.HTTP_400_BAD_REQUEST)
+    serializer_class = CategorySerializer
+    queryset = Category.objects.all()
