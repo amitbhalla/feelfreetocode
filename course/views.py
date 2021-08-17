@@ -35,6 +35,13 @@ class CourseViewSet(ModelViewSet):
     ordering_fields = '__all__'
     queryset = Course.objects.all()
 
+    def get_queryset(self):
+        tag = self.request.query_params.get('tag')
+        if tag is not None:
+            courses = Tag.objects.filter(tag=tag).values_list('course')
+            return self.queryset.filter(pk__in=courses)
+        return self.queryset
+
     # Overriding save method
     def create(self, request, *args, **kwargs):
         course = request.data  # Get request data
