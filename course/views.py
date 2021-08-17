@@ -42,7 +42,7 @@ class CourseViewSet(ModelViewSet):
 
         # DoesNotExist checks for error
         # ValidationError if pk is in valid uuid format
-        except Category.DoesNotExist or ValidationError:  
+        except Category.DoesNotExist or ValidationError:
             error_message = {
                 'category_id': ['category_id is not valid.']
             }
@@ -72,3 +72,25 @@ class TagViewSet(ModelViewSet):
     permission_classes = [IsAdminUserOrReadOnly]
     serializer_class = TagSerializer
     queryset = Tag.objects.all()
+
+    def create(self, request, *args, **kwargs):
+        tag = request.data
+        course_id = tag.get('course')
+        course = None
+
+        try:
+            course = Course.objects.get(pk=course_id)
+        except Course.DoesNotExist or ValidationError:
+            error_message = {
+                'course': ["course_id is invalid!"]
+            }
+            return Response(error_message)
+
+        serializer = TagSerializer(data=tag)
+
+        if serializer.is_valid():
+            tag = Tag(**serializer.validated_data, course=course)
+            tag.save()
+            return Response(TagSerializer(tag).data)
+        else:
+            return Response(serializer.errors)
