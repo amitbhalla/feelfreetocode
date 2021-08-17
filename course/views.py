@@ -14,6 +14,7 @@ from course.models import Category, Course, Tag
 class CategoryViewSet(ModelViewSet):
     permission_classes = [IsAdminUserOrReadOnly]
     serializer_class = CategorySerializer
+    filterset_fields = ['id', 'title', 'slug']
     queryset = Category.objects.all()
 
 
@@ -27,22 +28,8 @@ class CategorySlugDetailView(RetrieveUpdateDestroyAPIView):
 class CourseViewSet(ModelViewSet):
     permission_classes = [IsAdminUserOrReadOnly]
     serializer_class = CourseSerializer
+    filterset_fields = ['id', 'category', 'slug', 'price', 'discount']
     queryset = Course.objects.all()
-
-    # For get request ?category=UUID
-    def list(self, request, *args, **kwargs):
-        category = request.query_params.get('category')
-        self.queryset = Course.objects.all()
-        if category:
-            try:
-                self.queryset = Course.objects.filter(category=category)
-            except ValidationError:
-                error_message = {
-                    'category_id': ['category_id is Invalid.']
-                }
-                return Response(error_message, status=status.HTTP_400_BAD_REQUEST)
-
-        return super().list(request, *args, **kwargs)
 
     # Overriding save method
     def create(self, request, *args, **kwargs):
@@ -89,6 +76,7 @@ class CourseSlugDetailView(RetrieveUpdateDestroyAPIView):
 class TagViewSet(ModelViewSet):
     permission_classes = [IsAdminUserOrReadOnly]
     serializer_class = TagSerializer
+    filterset_fields = ['id', 'course', 'tag']
     queryset = Tag.objects.all()
 
     def create(self, request, *args, **kwargs):
