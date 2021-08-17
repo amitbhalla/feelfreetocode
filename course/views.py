@@ -5,8 +5,6 @@ from rest_framework.viewsets import ModelViewSet
 from rest_framework.generics import RetrieveUpdateDestroyAPIView
 from rest_framework.response import Response
 from rest_framework import status
-from rest_framework_word_filter import FullWordSearchFilter
-
 
 from core.permissions import IsAdminUserOrReadOnly
 from course.serializers import CategorySerializer, CourseSerializer, TagSerializer
@@ -16,8 +14,7 @@ from course.models import Category, Course, Tag
 class CategoryViewSet(ModelViewSet):
     permission_classes = [IsAdminUserOrReadOnly]
     serializer_class = CategorySerializer
-    filter_backends = (FullWordSearchFilter, )
-    word_fields = ('title', 'slug')
+    filterset_fields = ['id', 'title', 'slug']
     queryset = Category.objects.all()
 
 
@@ -31,6 +28,7 @@ class CategorySlugDetailView(RetrieveUpdateDestroyAPIView):
 class CourseViewSet(ModelViewSet):
     permission_classes = [IsAdminUserOrReadOnly]
     serializer_class = CourseSerializer
+    filterset_fields = ['id', 'category', 'slug', 'price', 'discount']
     queryset = Course.objects.all()
 
     # Overriding save method
@@ -78,6 +76,7 @@ class CourseSlugDetailView(RetrieveUpdateDestroyAPIView):
 class TagViewSet(ModelViewSet):
     permission_classes = [IsAdminUserOrReadOnly]
     serializer_class = TagSerializer
+    filterset_fields = ['id', 'course', 'tag']
     queryset = Tag.objects.all()
 
     def create(self, request, *args, **kwargs):

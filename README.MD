@@ -9,7 +9,6 @@ First LMS site by Amit
 * django-environ==0.4.5
 * django-filter==2.4.0
 * djangorestframework==3.12.4
-* djangorestframework-word-filter==0.2.0
 * flake8==3.9.2
 * isort==5.9.3
 * lazy-object-proxy==1.6.0
