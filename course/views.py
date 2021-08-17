@@ -1,4 +1,6 @@
 from django.core.exceptions import ValidationError
+
+from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.generics import RetrieveUpdateDestroyAPIView
 from rest_framework.response import Response
@@ -27,6 +29,22 @@ class CourseViewSet(ModelViewSet):
     serializer_class = CourseSerializer
     queryset = Course.objects.all()
 
+    # For get request ?category=UUID
+    def list(self, request, *args, **kwargs):
+        category = request.query_params.get('category')
+        self.queryset = Course.objects.all()
+        if category:
+            try:
+                self.queryset = Course.objects.filter(category=category)
+            except ValidationError:
+                error_message = {
+                    'category_id': ['category_id is Invalid.']
+                }
+                return Response(error_message, status=status.HTTP_400_BAD_REQUEST)
+
+        return super().list(request, *args, **kwargs)
+
+    # Overriding save method
     def create(self, request, *args, **kwargs):
         course = request.data  # Get request data
         category_id = course.get('category_id')  # get category_id
@@ -35,7 +53,7 @@ class CourseViewSet(ModelViewSet):
             error_message = {
                 'category_id': ['category_id is required.']
             }
-            return Response(error_message)
+            return Response(error_message, status=status.HTTP_400_BAD_REQUEST)
 
         try:  # check if passed category_id is valid
             category = Category.objects.get(pk=category_id)
@@ -46,7 +64,7 @@ class CourseViewSet(ModelViewSet):
             error_message = {
                 'category_id': ['category_id is not valid.']
             }
-            return Response(error_message)
+            return Response(error_message, status=status.HTTP_400_BAD_REQUEST)
 
         context = {
             'request': request
@@ -56,7 +74,7 @@ class CourseViewSet(ModelViewSet):
         if serializer.is_valid():
             courseInstance = Course(**serializer.validated_data, category=category)
             courseInstance.save()
-            return Response(CourseSerializer(courseInstance, context=context).data)
+            return Response(CourseSerializer(courseInstance, context=context).data, status=status.HTTP_200_OK)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -84,13 +102,28 @@ class TagViewSet(ModelViewSet):
             error_message = {
                 'course': ["course_id is invalid!"]
             }
-            return Response(error_message)
+            return Response(error_message, status=status.HTTP_400_BAD_REQUEST)
 
         serializer = TagSerializer(data=tag)
 
         if serializer.is_valid():
             tag = Tag(**serializer.validated_data, course=course)
             tag.save()
-            return Response(TagSerializer(tag).data)
+            return Response(TagSerializer(tag).data, status=status.HTTP_200_OK)
         else:
-            return Response(serializer.errors)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class CoursesByCategoryView(APIView):
+    def get(self, request, category_id):
+        # courses = Course.objects.filter(category_id=Category(pk=category_id))
+        try:
+            courses = Course.objects.filter(category_id=category_id)
+        except ValidationError:
+            error_message = {
+                'category': ["category_id is invalid!"]
+            }
+            return Response(error_message, status=status.HTTP_400_BAD_REQUEST)
+
+        serializer = CourseSerializer(courses, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
