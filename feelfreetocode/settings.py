@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'doubt',
     'order',
     'review',
+    'core',
 ]
 
 MIDDLEWARE = [

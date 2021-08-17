@@ -32,5 +32,6 @@ First LMS site by Amit
 * coupon
 * review
 * doubt
+* core
 
 
