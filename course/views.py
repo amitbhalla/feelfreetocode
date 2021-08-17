@@ -16,6 +16,7 @@ class CategoryViewSet(ModelViewSet):
     serializer_class = CategorySerializer
     filterset_fields = ['title', 'id', 'slug']
     search_fields = ['title', 'id', 'slug']
+    ordering_fields = '__all__'
     queryset = Category.objects.all()
 
 
@@ -31,6 +32,7 @@ class CourseViewSet(ModelViewSet):
     serializer_class = CourseSerializer
     filterset_fields = ['title', 'id', 'slug', 'language', 'price', 'discount', 'active']
     search_fields = ['title', 'id', 'slug', 'language', 'price', 'discount', 'active']
+    ordering_fields = '__all__'
     queryset = Course.objects.all()
 
     # Overriding save method
@@ -80,6 +82,7 @@ class TagViewSet(ModelViewSet):
     serializer_class = TagSerializer
     filterset_fields = ['id', 'tag']
     search_fields = ['id', 'tag']
+    ordering_fields = '__all__'
     queryset = Tag.objects.all()
 
     def create(self, request, *args, **kwargs):
