@@ -10,18 +10,19 @@ def api_root(request):
 
         'Courses': {
             'Course List': reverse('course:course-list', request=request),
-            'Course Detail': reverse('course:course-detail', args={'pk': 'pk'}, request=request),
-            'Course Detail by Slug': reverse('course:course-detail-by-slug', args={'slug': 'slug'}, request=request),
+            'Course Detail by PK': reverse('course:course-detail', args=[1], request=request),
+            'Course Detail by Slug': reverse('course:course-detail-by-slug', args=['course-slug'], request=request),
         },
 
         'Categories': {
             'Category List': reverse('course:category-list', request=request),
-            'Category Detail': reverse('course:category-detail', args={'pk': 'pk'}, request=request),
+            'Category Detail by PK': reverse('course:category-detail', args=[1], request=request),
+            'Category Detail by Slug': reverse('course:category-detail-by-slug', args=['category-slug'], request=request),
         },
 
         'Tags': {
             'Course List': reverse('course:tag-list', request=request),
-            'Course Detail': reverse('course:tag-detail', args={'pk': 'pk'}, request=request),
+            'Course Detail by PK': reverse('course:tag-detail', args=[1], request=request),
         },
     }
     return Response(response)
