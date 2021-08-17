@@ -2,8 +2,10 @@ asgiref==3.4.1
 astroid==2.6.6
 Django==3.2.6
 django-environ==0.4.5
-django-filter==2.4.0
+django-filter==1.1.0
 djangorestframework==3.12.4
+djangorestframework-filters==0.11.1
+djangorestframework-word-filter==0.2.0
 flake8==3.9.2
 isort==5.9.3
 lazy-object-proxy==1.6.0
