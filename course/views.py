@@ -15,6 +15,7 @@ class CategoryViewSet(ModelViewSet):
     permission_classes = [IsAdminUserOrReadOnly]
     serializer_class = CategorySerializer
     filterset_fields = ['title', 'id', 'slug']
+    search_fields = ['title', 'id', 'slug']
     queryset = Category.objects.all()
 
 
@@ -29,6 +30,7 @@ class CourseViewSet(ModelViewSet):
     permission_classes = [IsAdminUserOrReadOnly]
     serializer_class = CourseSerializer
     filterset_fields = ['title', 'id', 'slug', 'language', 'price', 'discount', 'active']
+    search_fields = ['title', 'id', 'slug', 'language', 'price', 'discount', 'active']
     queryset = Course.objects.all()
 
     # Overriding save method
@@ -77,6 +79,7 @@ class TagViewSet(ModelViewSet):
     permission_classes = [IsAdminUserOrReadOnly]
     serializer_class = TagSerializer
     filterset_fields = ['id', 'tag']
+    search_fields = ['id', 'tag']
     queryset = Tag.objects.all()
 
     def create(self, request, *args, **kwargs):
