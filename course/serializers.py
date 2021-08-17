@@ -10,12 +10,16 @@ class CategorySerializer(ModelSerializer):
 
 
 class CourseSerializer(ModelSerializer):
+    category = CategorySerializer(read_only=True)
+
     class Meta:
         model = Course
         fields = '__all__'
 
 
 class TagSerializer(ModelSerializer):
+    course = CourseSerializer(read_only=True)
+
     class Meta:
         model = Tag
         fields = '__all__'

@@ -13,6 +13,7 @@ class CategoryViewSet(ModelViewSet):
 
 
 class CategorySlugDetailView(RetrieveUpdateDestroyAPIView):
+    permission_classes = [IsAdminUserOrReadOnly]
     lookup_field = 'slug'
     serializer_class = CategorySerializer
     queryset = Category.objects.all()
@@ -25,6 +26,7 @@ class CourseViewSet(ModelViewSet):
 
 
 class CourseSlugDetailView(RetrieveUpdateDestroyAPIView):
+    permission_classes = [IsAdminUserOrReadOnly]
     lookup_field = 'slug'
     serializer_class = CourseSerializer
     queryset = Course.objects.all()
