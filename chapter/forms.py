@@ -9,4 +9,4 @@ class TextChapterForm(ModelForm):
 
     class Meta:
         model = TextChapter
-        fields = '__all__'
+        fields = "__all__"
