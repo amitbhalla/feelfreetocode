@@ -30,6 +30,7 @@ First LMS site by Amit
     * Tag
 * chapter
     * Chapter
+    * LinkChapter
 * order
 * coupon
 * review
