@@ -13,6 +13,16 @@ chapter_choices = (
     ('V', 'Videos'),
     ('L', 'Link'),
 )
+chapter_choises_description = (
+    ('T', 'Create your textual lessons in the course. It can also be used to embed iFrame, add HTML code through the Source option'),
+    ('H', 'Define your chapter or section headings.'),
+    ('V', 'All uploaded videos are completely secure and non downloadable. It can also be used to embed youtube and Vimeo videos.'),
+    ('L', 'Add Link which will be embedded in iFrame')
+)
+video_plateform_choises = (
+    ('Y', 'Youtube'),
+    ('V', 'Vimeo')
+)
 
 
 # Holds the chapter object
@@ -25,8 +35,33 @@ class Chapter(models.Model):
 
 
 # Object inside a chapter
+class TextChapter(models.Model):
+    id = models.UUIDField(default=uuid.uuid4, primary_key=True, editable=False)
+    chapter = models.OneToOneField(Chapter, on_delete=models.CASCADE, related_name='text_chapter')
+    title = models.CharField(max_length=150)
+    content = models.TextField()
+
+
+# Object inside a chapter
+class HeadingChapter(models.Model):
+    id = models.UUIDField(default=uuid.uuid4, primary_key=True, editable=False)
+    chapter = models.OneToOneField(Chapter, on_delete=models.CASCADE, related_name='heading_chapter')
+    title = models.CharField(max_length=150)
+
+
+# Object inside a chapter
+class VideoChapter(models.Model):
+    id = models.UUIDField(default=uuid.uuid4, primary_key=True, editable=False)
+    chapter = models.OneToOneField(Chapter, on_delete=models.CASCADE, related_name='video_chapter')
+    title = models.CharField(max_length=150)
+    video_id = models.CharField(max_length=150, unique=False)
+    description = models.TextField()
+    video_plateform = models.CharField(choices=video_plateform_choises, max_length=2)
+
+
+# Object inside a chapter
 class LinkChapter(models.Model):
     id = models.UUIDField(default=uuid.uuid4, primary_key=True, editable=False)
     chapter = models.OneToOneField(Chapter, on_delete=models.CASCADE, related_name='link_chapter')
     title = models.CharField(max_length=150)
-    url = models.URLField(max_length=150)
+    url = models.URLField('URL', max_length=150)
