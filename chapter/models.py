@@ -19,9 +19,9 @@ chapter_choises_description = (
     ('V', 'All uploaded videos are completely secure and non downloadable. It can also be used to embed youtube and Vimeo videos.'),
     ('L', 'Add Link which will be embedded in iFrame')
 )
-video_plateform_choises = (
+video_platform_choises = (
     ('Y', 'Youtube'),
-    ('V', 'Vimeo')
+    ('V', 'Vimeo'),
 )
 
 
@@ -56,7 +56,7 @@ class VideoChapter(models.Model):
     title = models.CharField(max_length=150)
     video_id = models.CharField(max_length=150, unique=False)
     description = models.TextField()
-    video_plateform = models.CharField(choices=video_plateform_choises, max_length=2)
+    video_platform = models.CharField(choices=video_platform_choises, max_length=2)
 
 
 # Object inside a chapter

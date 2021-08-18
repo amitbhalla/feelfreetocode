@@ -1,6 +1,8 @@
 from django.urls import path
-from .views import test_view
+from .views import chapter_types_view
 
+
+# api/chapters/
 urlpatterns = [
-    path('test/', test_view, name='test-api'),
+    path('chapter-types/', chapter_types_view, name='chapter-type-view'),
 ]
