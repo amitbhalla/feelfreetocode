@@ -64,8 +64,7 @@ class ChapterCreateView(CreateAPIView):
 
         request = self.request
         print(request.data)
-        serializer = self.serializer_class(
-            data=request.data, context={"request": request, "full": True})
+        serializer = self.serializer_class(data=request.data, context={"request": request, "full": True})
         serializer.is_valid()
         return serializer
 
