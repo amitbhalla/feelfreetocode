@@ -27,7 +27,7 @@ def api_root(request):
             "Course Detail by PK": reverse("course:tag-detail", args=[1], request=request),
         },
         "Chapter": {
-            "Chapter List": reverse("chapter:chapter-listcreateview", request=request),
+            "Chapter List": reverse("chapter:chapter-createview", request=request),
             "Chapter Types": reverse("chapter:chapter-type-view", request=request),
             "Video Platform Listview": reverse("chapter:video-platform-listview", request=request),
         },

@@ -37,7 +37,7 @@ class Chapter(models.Model):
     course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name="courses")
     chapter_type = models.CharField(choices=chapter_choices, max_length=150)
     index = models.IntegerField(null=False)
-    parent_chapter = models.ForeignKey("Chapter", on_delete=models.CASCADE, related_name="child_chapters")
+    parent_chapter = models.ForeignKey("Chapter", on_delete=models.CASCADE, related_name="child_chapters", blank=True, null=True)
 
 
 # Object inside a chapter
