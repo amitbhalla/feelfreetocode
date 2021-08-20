@@ -40,12 +40,15 @@ class Chapter(models.Model):
     chapter_type = models.CharField(choices=chapter_choices, max_length=150)
     index = models.IntegerField(null=False)
     parent_chapter = models.ForeignKey(
-        "Chapter",
+        "chapter",
         on_delete=models.CASCADE,
         related_name="child_chapters",
         null=True,
         blank=True,
     )
+
+    def __str__(self):
+        return str(self.course)
 
 
 # Object inside a chapter
@@ -57,6 +60,9 @@ class TextChapter(models.Model):
     title = models.CharField(max_length=150)
     content = models.TextField()
 
+    def __str__(self):
+        return self.title
+
 
 # Object inside a chapter
 class HeadingChapter(models.Model):
@@ -65,6 +71,9 @@ class HeadingChapter(models.Model):
         Chapter, on_delete=models.CASCADE, related_name="heading_chapter"
     )
     title = models.CharField(max_length=150)
+
+    def __str__(self):
+        return self.title
 
 
 # Object inside a chapter
@@ -80,6 +89,9 @@ class VideoChapter(models.Model):
         choices=video_platform_choises, max_length=2
     )
 
+    def __str__(self):
+        return self.title
+
 
 # Object inside a chapter
 class LinkChapter(models.Model):
@@ -89,3 +101,6 @@ class LinkChapter(models.Model):
     )
     title = models.CharField(max_length=150)
     url = models.URLField("URL", max_length=150)
+
+    def __str__(self):
+        return self.title

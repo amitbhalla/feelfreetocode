@@ -64,8 +64,7 @@ class ChapterSerializer(ModelSerializer):
             raise ValidationError({"text_chapter": "text_chapter is required"})
         text_chapter_serializer = TextChapterSerializer(data=text_chapter_raw)
         if text_chapter_serializer.is_valid():
-            print("-" * 100)
-            print(text_chapter_serializer.validated_data)
+            return TextChapter(**text_chapter_serializer._validated_data)
         else:
             raise ValidationError(
                 {"text_chapter": text_chapter_serializer.errors}
@@ -81,8 +80,7 @@ class ChapterSerializer(ModelSerializer):
             data=heading_chapter_raw
         )
         if heading_chapter_serializer.is_valid():
-            print("-" * 100)
-            print(heading_chapter_serializer.validated_data)
+            return HeadingChapter(**heading_chapter_serializer._validated_data)
         else:
             raise ValidationError(
                 {"heading_chapter": heading_chapter_serializer.errors}
@@ -98,8 +96,7 @@ class ChapterSerializer(ModelSerializer):
             data=video_chapter_raw
         )
         if video_chapter_serializer.is_valid():
-            print("-" * 100)
-            print(video_chapter_serializer.validated_data)
+            return VideoChapter(**video_chapter_serializer._validated_data)
         else:
             raise ValidationError(
                 {"video_chapter": video_chapter_serializer.errors}
@@ -111,8 +108,7 @@ class ChapterSerializer(ModelSerializer):
             raise ValidationError({"link_chapter": "link_chapter is required"})
         link_chapter_serializer = LinkChapterSerializer(data=link_chapter_raw)
         if link_chapter_serializer.is_valid():
-            print("-" * 100)
-            print(link_chapter_serializer.validated_data)
+            return LinkChapter(**link_chapter_serializer._validated_data)
         else:
             raise ValidationError(
                 {"link_chapter": link_chapter_serializer.errors}
@@ -121,13 +117,36 @@ class ChapterSerializer(ModelSerializer):
     def create(self, validated_data):
         data = self.context.get("request").data
         chapter_type = data.get("chapter_type")
+        chapter_type_object = None
 
         if chapter_type == "T":
-            self.handle_textchapter(data)
+            chapter_type_object = self.handle_textchapter(data)
         elif chapter_type == "H":
-            self.handle_headingchapter(data)
+            chapter_type_object = self.handle_headingchapter(data)
         elif chapter_type == "V":
-            self.handle_videochapter(data)
+            chapter_type_object = self.handle_videochapter(data)
         elif chapter_type == "L":
-            self.handle_linkchapter(data)
-        return Chapter()
+            chapter_type_object = self.handle_linkchapter(data)
+
+        # Fetch the chapter objject
+        # Get the total parent chapter i.e. those who do not have an index
+        # Add one to them and set that as the new index
+        chapter = Chapter(**validated_data)
+        course = chapter.course
+        if chapter.parent_chapter is None:
+            last_index_parent_chapter = Chapter.objects.filter(
+                course=course, parent_chapter=None
+            ).count()
+            # Save order
+            # Save the Chapter first
+            # Then save the Link/Heading/Text/Video Chapter
+            chapter.index = last_index_parent_chapter + 1
+            chapter.save()
+            chapter_type_object.chapter = chapter
+            chapter_type_object.save()
+        else:
+
+            pass
+        # End
+
+        return chapter

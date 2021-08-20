@@ -11,26 +11,30 @@ from chapter.models import (
 from chapter.forms import TextChapterForm
 
 
-# Register your models here.
 class ChapterAdmin(admin.ModelAdmin):
-    list_display = ["course", "chapter_type", "index", "child_chapters"]
+    list_display = ["course", "chapter_type", "index"]
+    ordering = ["course"]
 
 
 class TextChapterAdmin(admin.ModelAdmin):
-    list_display = ["chapter", "title"]
+    list_display = ["title", "chapter"]
+    ordering = ["chapter"]
     form = TextChapterForm
 
 
 class HeadingChapterAdmin(admin.ModelAdmin):
-    list_display = ["chapter", "title"]
+    list_display = ["title", "chapter"]
+    ordering = ["chapter"]
 
 
 class VideoChapterAdmin(admin.ModelAdmin):
-    list_display = ["chapter", "title"]
+    list_display = ["title", "chapter"]
+    ordering = ["chapter"]
 
 
 class LinkChapterAdmin(admin.ModelAdmin):
-    list_display = ["chapter", "title"]
+    list_display = ["title", "chapter"]
+    ordering = ["chapter"]
 
 
 admin.site.register(Chapter, ChapterAdmin)
