@@ -65,5 +65,10 @@ class ChapterListCreateView(ListCreateAPIView):
         if self.request.method == "POST":
             context = {"request": self.request}
             request = self.request
-            return self.serializer_class(data=request.data, context=context)
+            serializer = self.serializer_class(
+                data=request.data, context=context
+            )
+            serializer.is_valid()
+            return serializer
+
         return self.serializer_class(self.queryset.all(), many=True)
