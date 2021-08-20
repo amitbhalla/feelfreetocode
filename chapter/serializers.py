@@ -81,6 +81,7 @@ class ChildChapterSerializer(ModelSerializer):
 
     def to_representation(self, instance):
         full = self.context.get("full")
+        print("FULL IN CHILD", full)
         if not full:
             instance = changeChapterData(instance)
 
@@ -125,7 +126,10 @@ class ChapterSerializer(ModelSerializer):
     def update(self, instance, validated_data):
         chapter_type_before_update = instance.chapter_type
         chapter = super().update(instance, validated_data)
+        print("Chapter", chapter)
+        print("chapter_type_object NEW : ", validated_data)
         chapter_type_object_validated_data = validated_data.get('chapter_type_object_validated_data')
+        print('chapter_type_object_validated_data', chapter_type_object_validated_data)
         chapter_type = chapter.chapter_type
 
         if chapter_type != chapter_type_before_update:
@@ -211,9 +215,11 @@ class ChapterSerializer(ModelSerializer):
     def get_child_chapters(self, instance):
         childs = instance.child_chapters.all().order_by('index')
         serialzer = ChildChapterSerializer(childs, many=True, context=self.context)
+        print("get _ childs", )
         return serialzer.data
 
     def create(self, validated_data):
+        print('validated data', validated_data)
         chapter_type_object = validated_data['chapter_type_object']
         validated_data.pop('chapter_type_object')
         validated_data.pop('chapter_type_object_validated_data')

@@ -22,17 +22,21 @@ def chapter_types_view(request):
             if id == _id:
                 return description
 
-    types = map(lambda e: dict(id=e[0], type=e[1], description=searchDescription(e[0])), chapter_choices)
+    types = map(lambda e: dict(
+        id=e[0], type=e[1], description=searchDescription(e[0])), chapter_choices)
     return Response(types)
 
 
 @api_view(['GET'])
 def video_platform_view(request):
-    platforms = map(lambda e: dict(id=e[0], platform=e[1]), video_platform_choises)
+
+    platforms = map(lambda e: dict(
+        id=e[0], platform=e[1]), video_platform_choises)
     return Response(platforms)
 
 
 class ChapterListView(ListAPIView):
+    # we wiil add persmission only user who purched this course
     queryset = Chapter.objects.all()
     serializer_class = ChapterSerializer
     ordering = ['index']
@@ -51,11 +55,13 @@ class ChapterListView(ListAPIView):
 
 
 class ChapterCreateView(CreateAPIView):
+
     permission_classes = [IsAdminUser]
     queryset = Chapter.objects.all()
     serializer_class = ChapterSerializer
 
     def get_serializer(self, *args, **kwargs):
+
         request = self.request
         print(request.data)
         serializer = self.serializer_class(data=request.data, context={"request": request, "full": True})
@@ -75,7 +81,9 @@ class ChapterDetailView(RetrieveUpdateDestroyAPIView):
             chapter = Chapter.objects.get(pk=chapter_id)
         except Chapter.DoesNotExist or ValidationError:
             return Response(status=404)
-
+        #  user subscribed this course
+        # then alwaays return full ojject data
+        # add full flag in create Chapter View
         context = {
             "full": chapter.is_preview,
             "request": request
