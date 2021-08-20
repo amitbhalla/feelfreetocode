@@ -9,15 +9,21 @@ from chapter.models import Chapter, TextChapter, VideoChapter, LinkChapter, Head
 
 def changeChapterData(instance):
     chapter_type = instance.chapter_type
+
     if(chapter_type == 'T'):
         tch = instance.text_chapter
         instance.text_chapter = TextChapter(title=tch.title, id=tch.id)
+
     if(chapter_type == 'L'):
         chapter = instance.link_chapter
-        instance.link_chapter = LinkChapter(id=chapter.id, title=chapter.title)
+        instance.link_chapter = LinkChapter(
+            id=chapter.id, title=chapter.title)
+
     if(chapter_type == 'V'):
         chapter = instance.video_chapter
-        instance.video_chapter = VideoChapter(id=chapter.id, title=chapter.title)
+        instance.video_chapter = VideoChapter(
+            id=chapter.id, title=chapter.title)
+
     return instance
 
 
@@ -115,63 +121,80 @@ class ChapterSerializer(ModelSerializer):
                     chapter.video_chapter.delete()
                 if ctype_tobedelete == 'L':
                     chapter.link_chapter.delete()
-            except ValidationError:
+            except:
                 traceback.print_exc()
 
     def delete_chapter_data(self, instance, currentType):
         types = ['L', 'V', "T", 'H']
-        to_be_delete_list = list(filter(lambda type: currentType != type, types))
+        to_be_delete_list = list(
+            filter(lambda type: currentType != type, types))
         self.delete_chapter_type_data(instance, to_be_delete_list)
 
     def update(self, instance, validated_data):
         chapter_type_before_update = instance.chapter_type
         chapter = super().update(instance, validated_data)
         print("Chapter", chapter)
-        print("chapter_type_object NEW : ", validated_data)
-        chapter_type_object_validated_data = validated_data.get('chapter_type_object_validated_data')
-        print('chapter_type_object_validated_data', chapter_type_object_validated_data)
+        print("chapter_type_object NEW : ",
+              validated_data)
+
+        chapter_type_object_validated_data = validated_data.get(
+            'chapter_type_object_validated_data')
+        # chapter_type_object.save()
+        print('chapter_type_object_validated_data',
+              chapter_type_object_validated_data)
+
         chapter_type = chapter.chapter_type
 
         if chapter_type != chapter_type_before_update:
             self.delete_chapter_data(instance, chapter_type)
+            # delete preview chapter
 
         if(chapter_type == 'H'):
             try:
-                HeadingChapterSerializer().update(chapter.heading_chapter, chapter_type_object_validated_data)
+                HeadingChapterSerializer().update(chapter.heading_chapter,
+                                                  chapter_type_object_validated_data)
             except HeadingChapter.DoesNotExist:
-                obj = HeadingChapter(**chapter_type_object_validated_data)
+                obj = HeadingChapter(
+                    **chapter_type_object_validated_data)
                 obj.chapter = chapter
                 obj.save()
                 chapter.heading_chapter = obj
 
         if(chapter_type == 'T'):
             try:
-                TextChapterSerializer().update(chapter.text_chapter, chapter_type_object_validated_data)
+                TextChapterSerializer().update(chapter.text_chapter,
+                                               chapter_type_object_validated_data)
             except TextChapter.DoesNotExist:
-                obj = TextChapter(**chapter_type_object_validated_data)
+                obj = TextChapter(
+                    **chapter_type_object_validated_data)
                 obj.chapter = chapter
                 obj.save()
                 chapter.text_chapter = obj
 
         if(chapter_type == 'V'):
             try:
-                VideoChapterSerializer().update(chapter.video_chapter, chapter_type_object_validated_data)
+                VideoChapterSerializer().update(chapter.video_chapter,
+                                                chapter_type_object_validated_data)
             except VideoChapter.DoesNotExist:
-                obj = VideoChapter(**chapter_type_object_validated_data)
+                obj = VideoChapter(
+                    **chapter_type_object_validated_data)
                 obj.chapter = chapter
                 obj.save()
                 chapter.video_chapter = obj
 
         if(chapter_type == 'L'):
             try:
-                LinkChapterSerializer().update(chapter.link_chapter, chapter_type_object_validated_data)
+                LinkChapterSerializer().update(chapter.link_chapter,
+                                               chapter_type_object_validated_data)
             except LinkChapter.DoesNotExist:
-                obj = LinkChapter(**chapter_type_object_validated_data)
+                obj = LinkChapter(
+                    **chapter_type_object_validated_data)
                 obj.chapter = chapter
                 obj.save()
                 chapter.link_chapter = obj
 
         chapter.save()
+
         return chapter
 
     def validate(self, attrs):
@@ -182,7 +205,8 @@ class ChapterSerializer(ModelSerializer):
         chapter_type_class = None
 
         if(chapter_type == 'H'):
-            chapter_type_object_validated_data = self.handleHeadingChapter(data)
+            chapter_type_object_validated_data = self.handleHeadingChapter(
+                data)
             chapter_type_class = HeadingChapter
 
         if(chapter_type == 'T'):
@@ -197,7 +221,8 @@ class ChapterSerializer(ModelSerializer):
             chapter_type_object_validated_data = self.handleVideoChapter(data)
             chapter_type_class = VideoChapter
 
-        chapter_type_object = chapter_type_class(**chapter_type_object_validated_data)
+        chapter_type_object = chapter_type_class(
+            **chapter_type_object_validated_data)
         attrs['chapter_type_object'] = chapter_type_object
         attrs['chapter_type_object_validated_data'] = chapter_type_object_validated_data
         return attrs
@@ -206,6 +231,7 @@ class ChapterSerializer(ModelSerializer):
         full = self.context.get("full")
         if not full:
             instance = changeChapterData(instance)
+
         data = super().to_representation(instance)
         course = instance.course
         user = self.context.get('request').user
@@ -214,21 +240,25 @@ class ChapterSerializer(ModelSerializer):
 
     def get_child_chapters(self, instance):
         childs = instance.child_chapters.all().order_by('index')
-        serialzer = ChildChapterSerializer(childs, many=True, context=self.context)
+        serialzer = ChildChapterSerializer(
+            childs, many=True, context=self.context)
         print("get _ childs", )
         return serialzer.data
 
     def create(self, validated_data):
         print('validated data', validated_data)
+
         chapter_type_object = validated_data['chapter_type_object']
         validated_data.pop('chapter_type_object')
         validated_data.pop('chapter_type_object_validated_data')
+
         chapter = Chapter(**validated_data)
         parent_chapter = validated_data.get('parent_chapter')
         course = chapter.course
 
         if(chapter.parent_chapter is None):
-            last_index_parent_chapter = Chapter.objects.filter(course=course, parent_chapter=None).count()
+            last_index_parent_chapter = Chapter.objects.filter(
+                course=course, parent_chapter=None).count()
             chapter.index = last_index_parent_chapter + 1
             chapter.save()
             chapter_type_object.chapter = chapter
@@ -246,7 +276,8 @@ class ChapterSerializer(ModelSerializer):
     def handleHeadingChapter(self, raw_json):
         heading_chapter_raw = raw_json.get('heading_chapter')
         if not heading_chapter_raw:
-            raise ValidationError({"heading_chapter": ["heading_chapter is required"]})
+            raise ValidationError(
+                {"heading_chapter": ["heading_chapter is required"]})
 
         header_chapter_serializer = HeadingChapterSerializer(
             data=heading_chapter_raw)
@@ -254,38 +285,47 @@ class ChapterSerializer(ModelSerializer):
         if header_chapter_serializer.is_valid():
             return header_chapter_serializer.validated_data
         else:
-            raise ValidationError({"heading_chapter": header_chapter_serializer.errors})
+            raise ValidationError(
+                {"heading_chapter": header_chapter_serializer.errors})
 
     def handleTextChapter(self, raw_json):
         text_chapter_raw = raw_json.get('text_chapter')
         if not text_chapter_raw:
-            raise ValidationError({"text_chapter": ["text_chapter is required"]})
+            raise ValidationError(
+                {"text_chapter": ["text_chapter is required"]})
 
-        text_chapter_serializer = TextChapterSerializer(data=text_chapter_raw)
+        text_chapter_serializer = TextChapterSerializer(
+            data=text_chapter_raw)
 
         if text_chapter_serializer.is_valid():
             return text_chapter_serializer.validated_data
         else:
-            raise ValidationError({"text_chapter": text_chapter_serializer.errors})
+            raise ValidationError(
+                {"text_chapter": text_chapter_serializer.errors})
 
     def handleLinkChapter(self, raw_json):
         link_chapter_raw = raw_json.get('link_chapter')
         if not link_chapter_raw:
-            raise ValidationError({"link_chapter": ["link_chapter is required"]})
+            raise ValidationError(
+                {"link_chapter": ["link_chapter is required"]})
 
-        link_chapter_serializer = LinkChapterSerializer(data=link_chapter_raw)
+        link_chapter_serializer = LinkChapterSerializer(
+            data=link_chapter_raw)
 
         if link_chapter_serializer.is_valid():
             return link_chapter_serializer.validated_data
         else:
-            raise ValidationError({"link_chapter": link_chapter_serializer.errors})
+            raise ValidationError(
+                {"link_chapter": link_chapter_serializer.errors})
 
     def handleVideoChapter(self, raw_json):
         video_chapter_raw = raw_json.get('video_chapter')
         if not video_chapter_raw:
-            raise ValidationError({"video_chapter": ["video_chapter is required"]})
+            raise ValidationError(
+                {"video_chapter": ["video_chapter is required"]})
 
-        video_chapter_serializer = VideoChapterSerializer(data=video_chapter_raw)
+        video_chapter_serializer = VideoChapterSerializer(
+            data=video_chapter_raw)
 
         if video_chapter_serializer.is_valid():
             return video_chapter_serializer.validated_data
