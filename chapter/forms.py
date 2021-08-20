@@ -1,5 +1,7 @@
-from chapter.models import TextChapter, VideoChapter
 from django.forms import ModelForm, CharField, Textarea
+
+
+from chapter.models import TextChapter
 
 
 class TextChapterForm(ModelForm):
@@ -7,12 +9,4 @@ class TextChapterForm(ModelForm):
 
     class Meta:
         model = TextChapter
-        fields = '__all__'
-
-
-class VideoChapterForm(ModelForm):
-    description = CharField(widget=Textarea)
-
-    class Meta:
-        model = VideoChapter
-        fields = '__all__'
+        fields = "__all__"
