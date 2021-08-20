@@ -9,13 +9,23 @@ def api_root(request):
         "API ROOT": reverse("api_root", request=request),
         "Courses": {
             "Course List": reverse("course:course-list", request=request),
-            "Course Detail by PK": reverse("course:course-detail", args=[1], request=request),
-            "Course Detail by Slug": reverse("course:course-detail-by-slug", args=["course-slug"], request=request),
-            "Course by Category ID": reverse("course:courses-by-category", args=[1], request=request),
+            "Course Detail by PK": reverse(
+                "course:course-detail", args=[1], request=request
+            ),
+            "Course Detail by Slug": reverse(
+                "course:course-detail-by-slug",
+                args=["course-slug"],
+                request=request,
+            ),
+            "Course by Category ID": reverse(
+                "course:courses-by-category", args=[1], request=request
+            ),
         },
         "Categories": {
             "Category List": reverse("course:category-list", request=request),
-            "Category Detail by PK": reverse("course:category-detail", args=[1], request=request),
+            "Category Detail by PK": reverse(
+                "course:category-detail", args=[1], request=request
+            ),
             "Category Detail by Slug": reverse(
                 "course:category-detail-by-slug",
                 args=["category-slug"],
@@ -24,12 +34,20 @@ def api_root(request):
         },
         "Tags": {
             "Course List": reverse("course:tag-list", request=request),
-            "Course Detail by PK": reverse("course:tag-detail", args=[1], request=request),
+            "Course Detail by PK": reverse(
+                "course:tag-detail", args=[1], request=request
+            ),
         },
         "Chapter": {
-            "Chapter List": reverse("chapter:chapter-listcreateview", request=request),
-            "Chapter Types": reverse("chapter:chapter-type-view", request=request),
-            "Video Platform Listview": reverse("chapter:video-platform-listview", request=request),
+            "Chapter List": reverse(
+                "chapter:chapter-listcreateview", request=request
+            ),
+            "Chapter Types": reverse(
+                "chapter:chapter-type-view", request=request
+            ),
+            "Video Platform Listview": reverse(
+                "chapter:video-platform-listview", request=request
+            ),
         },
     }
     return Response(response)
