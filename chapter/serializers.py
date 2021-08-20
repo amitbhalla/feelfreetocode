@@ -100,12 +100,21 @@ class ChapterSerializer(ModelSerializer):
     # End
 
     # Nested serializer to show child chapter inside parent chapter
-    child_chapters = ChildChapterSerializer(read_only=True, many=True)
+    child_chapters = serializers.SerializerMethodField()
     # End
 
     class Meta:
         model = Chapter
         fields = "__all__"
+
+    # This function is basically used for sorting child chapters by index
+    def get_child_chapters(self, instance):
+        childs = instance.child_chapters.all().order_by("index")
+        serializer = ChildChapterSerializer(childs, many=True)
+        print("get - childs:", serializer.data)
+        return serializer.data
+
+    # End
 
     def handle_textchapter(self, data):
         text_chapter_raw = data.get("text_chapter")

@@ -48,6 +48,7 @@ def video_platform_view(request):
 class ChapterListView(ListAPIView):
     queryset = Chapter.objects.all()
     serializer_class = ChapterSerializer
+    ordering = ["index"]
 
     def get(self, request, *args, **kwargs):
         course = self.kwargs.get("course")
