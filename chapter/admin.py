@@ -12,29 +12,29 @@ from chapter.forms import TextChapterForm
 
 
 class ChapterAdmin(admin.ModelAdmin):
-    list_display = ["course", "chapter_type", "index"]
-    ordering = ["course"]
+    list_display = ["course", "chapter_type", "index", "parent_chapter"]
+    ordering = ["course", "index"]
 
 
 class TextChapterAdmin(admin.ModelAdmin):
     list_display = ["title", "chapter"]
-    ordering = ["chapter"]
+    # ordering = ["chapter"]
     form = TextChapterForm
 
 
 class HeadingChapterAdmin(admin.ModelAdmin):
     list_display = ["title", "chapter"]
-    ordering = ["chapter"]
+    # ordering = ["chapter"]
 
 
 class VideoChapterAdmin(admin.ModelAdmin):
     list_display = ["title", "chapter"]
-    ordering = ["chapter"]
+    # ordering = ["chapter"]
 
 
 class LinkChapterAdmin(admin.ModelAdmin):
     list_display = ["title", "chapter"]
-    ordering = ["chapter"]
+    # ordering = ["chapter"]
 
 
 admin.site.register(Chapter, ChapterAdmin)

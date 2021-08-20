@@ -35,12 +35,12 @@ video_platform_choises = (
 class Chapter(models.Model):
     id = models.UUIDField(default=uuid.uuid4, primary_key=True, editable=False)
     course = models.ForeignKey(
-        Course, on_delete=models.CASCADE, related_name="courses"
+        Course, on_delete=models.CASCADE, related_name="chapters"
     )
     chapter_type = models.CharField(choices=chapter_choices, max_length=150)
     index = models.IntegerField(null=False)
     parent_chapter = models.ForeignKey(
-        "chapter",
+        "Chapter",
         on_delete=models.CASCADE,
         related_name="child_chapters",
         null=True,

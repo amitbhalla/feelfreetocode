@@ -20,6 +20,12 @@ class TextChapterSerializer(ModelSerializer):
         model = TextChapter
         fields = "__all__"
 
+    # used for removing what API view displays
+    def to_representation(self, instance):
+        original_object = super().to_representation(instance)
+        original_object.pop("chapter")
+        return original_object
+
 
 class HeadingChapterSerializer(ModelSerializer):
     chapter = serializers.UUIDField(
@@ -29,6 +35,12 @@ class HeadingChapterSerializer(ModelSerializer):
     class Meta:
         model = HeadingChapter
         fields = "__all__"
+
+    # used for removing what API view displays
+    def to_representation(self, instance):
+        original_object = super().to_representation(instance)
+        original_object.pop("chapter")
+        return original_object
 
 
 class VideoChapterSerializer(ModelSerializer):
@@ -40,6 +52,12 @@ class VideoChapterSerializer(ModelSerializer):
         model = VideoChapter
         fields = "__all__"
 
+    # used for removing what API view displays
+    def to_representation(self, instance):
+        original_object = super().to_representation(instance)
+        original_object.pop("chapter")
+        return original_object
+
 
 class LinkChapterSerializer(ModelSerializer):
     chapter = serializers.UUIDField(
@@ -50,9 +68,22 @@ class LinkChapterSerializer(ModelSerializer):
         model = LinkChapter
         fields = "__all__"
 
+    # used for removing what API view displays
+    def to_representation(self, instance):
+        original_object = super().to_representation(instance)
+        original_object.pop("chapter")
+        return original_object
+
 
 class ChapterSerializer(ModelSerializer):
     index = serializers.IntegerField(required=False)
+
+    # Read only since we only use these for display
+    text_chapter = TextChapterSerializer(read_only=True)
+    heading_chapter = HeadingChapterSerializer(read_only=True)
+    video_chapter = VideoChapterSerializer(read_only=True)
+    link_chapter = LinkChapterSerializer(read_only=True)
+    # End
 
     class Meta:
         model = Chapter
