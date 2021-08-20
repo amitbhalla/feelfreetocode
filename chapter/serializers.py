@@ -75,6 +75,20 @@ class LinkChapterSerializer(ModelSerializer):
         return original_object
 
 
+# This class is created because we cannot refer to ChapterSerializer inside ChapterSerializer
+# Which is what we would use to show nested serializer
+class ChildChapterSerializer(ModelSerializer):
+    index = serializers.IntegerField(required=False)
+    text_chapter = TextChapterSerializer(read_only=True)
+    heading_chapter = HeadingChapterSerializer(read_only=True)
+    video_chapter = VideoChapterSerializer(read_only=True)
+    link_chapter = LinkChapterSerializer(read_only=True)
+
+    class Meta:
+        model = Chapter
+        fields = "__all__"
+
+
 class ChapterSerializer(ModelSerializer):
     index = serializers.IntegerField(required=False)
 
@@ -83,6 +97,10 @@ class ChapterSerializer(ModelSerializer):
     heading_chapter = HeadingChapterSerializer(read_only=True)
     video_chapter = VideoChapterSerializer(read_only=True)
     link_chapter = LinkChapterSerializer(read_only=True)
+    # End
+
+    # Nested serializer to show child chapter inside parent chapter
+    child_chapters = ChildChapterSerializer(read_only=True, many=True)
     # End
 
     class Meta:
@@ -184,7 +202,11 @@ class ChapterSerializer(ModelSerializer):
             total_childs = Chapter.objects.filter(
                 parent_chapter=parent_chapter
             ).count()
+            print("*" * 100)
             chapter.index = total_childs + 1
+            print(
+                "total_childs:", total_childs, " chapter.index", chapter.index
+            )
             chapter.save()
             chapter_type_object.chapter = chapter
             chapter_type_object.save()

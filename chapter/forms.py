@@ -1,6 +1,5 @@
 from django.forms import ModelForm, CharField, Textarea
 
-
 from chapter.models import TextChapter
 
 

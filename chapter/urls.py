@@ -1,8 +1,10 @@
 from django.urls import path
+
 from .views import (
     chapter_types_view,
     video_platform_view,
-    ChapterListCreateView,
+    ChapterListView,
+    ChapterCreateView,
 )
 
 
@@ -12,5 +14,10 @@ urlpatterns = [
     path(
         "video-platforms/", video_platform_view, name="video-platform-listview"
     ),
-    path("", ChapterListCreateView.as_view(), name="chapter-listcreateview"),
+    path(
+        "course/<str:course>",
+        ChapterListView.as_view(),
+        name="chapter-listview",
+    ),
+    path("", ChapterCreateView.as_view(), name="chapter-createview"),
 ]

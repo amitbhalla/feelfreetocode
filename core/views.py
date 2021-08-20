@@ -39,8 +39,11 @@ def api_root(request):
             ),
         },
         "Chapter": {
-            "Chapter List": reverse(
-                "chapter:chapter-listcreateview", request=request
+            "Chapters by Course ID": reverse(
+                "chapter:chapter-listview", args=[1], request=request
+            ),
+            "Chapter Create (POST Requests Only)": reverse(
+                "chapter:chapter-createview", request=request
             ),
             "Chapter Types": reverse(
                 "chapter:chapter-type-view", request=request
