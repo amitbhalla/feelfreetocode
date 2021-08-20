@@ -18,23 +18,23 @@ class ChapterAdmin(admin.ModelAdmin):
 
 class TextChapterAdmin(admin.ModelAdmin):
     list_display = ["title", "chapter"]
-    # ordering = ["chapter"]
+    ordering = ["chapter"]
     form = TextChapterForm
 
 
 class HeadingChapterAdmin(admin.ModelAdmin):
     list_display = ["title", "chapter"]
-    # ordering = ["chapter"]
+    ordering = ["chapter"]
 
 
 class VideoChapterAdmin(admin.ModelAdmin):
     list_display = ["title", "chapter"]
-    # ordering = ["chapter"]
+    ordering = ["chapter"]
 
 
 class LinkChapterAdmin(admin.ModelAdmin):
     list_display = ["title", "chapter"]
-    # ordering = ["chapter"]
+    ordering = ["chapter"]
 
 
 admin.site.register(Chapter, ChapterAdmin)

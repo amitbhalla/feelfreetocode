@@ -164,6 +164,8 @@ class ChapterSerializer(ModelSerializer):
         # Add one to them and set that as the new index
         chapter = Chapter(**validated_data)
         course = chapter.course
+        parent_chapter = validated_data.get("parent_chapter")
+
         if chapter.parent_chapter is None:
             last_index_parent_chapter = Chapter.objects.filter(
                 course=course, parent_chapter=None
@@ -176,8 +178,15 @@ class ChapterSerializer(ModelSerializer):
             chapter_type_object.chapter = chapter
             chapter_type_object.save()
         else:
-
-            pass
-        # End
+            # Save order
+            # Save the Chapter first
+            # Then save the Link/Heading/Text/Video Chapter
+            total_childs = Chapter.objects.filter(
+                parent_chapter=parent_chapter
+            ).count()
+            chapter.index = total_childs + 1
+            chapter.save()
+            chapter_type_object.chapter = chapter
+            chapter_type_object.save()
 
         return chapter
