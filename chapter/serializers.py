@@ -248,7 +248,8 @@ class ChapterSerializer(ModelSerializer):
         if not heading_chapter_raw:
             raise ValidationError({"heading_chapter": ["heading_chapter is required"]})
 
-        header_chapter_serializer = HeadingChapterSerializer(data=heading_chapter_raw)
+        header_chapter_serializer = HeadingChapterSerializer(
+            data=heading_chapter_raw)
 
         if header_chapter_serializer.is_valid():
             return header_chapter_serializer.validated_data
