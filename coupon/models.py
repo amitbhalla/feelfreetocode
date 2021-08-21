@@ -22,4 +22,5 @@ class Coupon(models.Model):
     )
 
     def __str__(self):
-        return str(self.course)
+        name = str(self.code) + " - " + str(self.course)
+        return name

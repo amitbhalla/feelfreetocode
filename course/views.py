@@ -7,7 +7,11 @@ from rest_framework.response import Response
 from rest_framework import status
 
 from core.permissions import IsAdminUserOrReadOnly
-from course.serializers import CategorySerializer, CourseSerializer, TagSerializer
+from course.serializers import (
+    CategorySerializer,
+    CourseSerializer,
+    TagSerializer,
+)
 from course.models import Category, Course, Tag
 
 
@@ -30,10 +34,26 @@ class CategorySlugDetailView(RetrieveUpdateDestroyAPIView):
 class CourseViewSet(ModelViewSet):
     permission_classes = [IsAdminUserOrReadOnly]
     serializer_class = CourseSerializer
-    filterset_fields = ["title", "id", "slug", "language", "price", "discount", "active"]
-    search_fields = ["title", "id", "slug", "language", "price", "discount", "active"]
+    filterset_fields = [
+        "title",
+        "id",
+        "slug",
+        "language",
+        "price",
+        "discount",
+        "active",
+    ]
+    search_fields = [
+        "title",
+        "id",
+        "slug",
+        "language",
+        "price",
+        "discount",
+        "active",
+    ]
     ordering_fields = "__all__"
-    queryset = Course.objects.all()
+    queryset = Course.objects.filter(active=True)
 
     def get_queryset(self):
         tag = self.request.query_params.get("tag")
@@ -47,7 +67,9 @@ class CourseViewSet(ModelViewSet):
         course = request.data  # Get request data
         category_id = course.get("category_id")  # get category_id
 
-        if category_id is None:  # if the user didn't pass category_id throw an error
+        if (
+            category_id is None
+        ):  # if the user didn't pass category_id throw an error
             error_message = {"category_id": ["category_id is required."]}
             return Response(error_message, status=status.HTTP_400_BAD_REQUEST)
 
@@ -64,9 +86,14 @@ class CourseViewSet(ModelViewSet):
         serializer = CourseSerializer(data=course, context=context)
 
         if serializer.is_valid():
-            courseInstance = Course(**serializer.validated_data, category=category)
+            courseInstance = Course(
+                **serializer.validated_data, category=category
+            )
             courseInstance.save()
-            return Response(CourseSerializer(courseInstance, context=context).data, status=status.HTTP_200_OK)
+            return Response(
+                CourseSerializer(courseInstance, context=context).data,
+                status=status.HTTP_200_OK,
+            )
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -104,7 +131,9 @@ class TagViewSet(ModelViewSet):
             tag.save()
             return Response(TagSerializer(tag).data, status=status.HTTP_200_OK)
         else:
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            return Response(
+                serializer.errors, status=status.HTTP_400_BAD_REQUEST
+            )
 
 
 class CoursesByCategoryView(APIView):
