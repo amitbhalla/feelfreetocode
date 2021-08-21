@@ -15,7 +15,6 @@ from chapter.models import (
     video_platform_choises,
 )
 from chapter.serializers import ChapterSerializer
-from core.permissions import IsAdminUserOrReadOnly
 
 
 @api_view(["GET"])
@@ -56,9 +55,9 @@ class ChapterListView(ListAPIView):
             uuid.UUID(course)
         except ValueError:
             return Response(
-                {"course_id": ["Course_id is not a valid UUID format!"]},
+                {"course_id": ["course_id is not a valid UUID format!"]},
                 status=status.HTTP_400_BAD_REQUEST,
-            )  # Using response become Django doesn't have a native ValueError
+            )  # Using response because Django doesn't have a native ValueError
         return super().get(request, *args, **kwargs)
 
     def get_queryset(self):

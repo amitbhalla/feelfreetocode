@@ -26,6 +26,7 @@ First LMS site by Amit
 - pylint==2.9.6
 - pytz==2021.1
 - regex==2021.8.3
+- shortuuid==1.0.1
 - sqlparse==0.4.1
 - toml==0.10.2
 - tomli==1.2.1

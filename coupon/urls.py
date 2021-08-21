@@ -1,6 +1,20 @@
 from django.urls import path
-from .views import test_view
+from django.urls.conf import include
+from rest_framework.routers import DefaultRouter
+
+from .views import CouponRetriveViewByCode, CouponModelViewSet
+
+coupon_router = DefaultRouter()
+coupon_router.register(
+    "", CouponModelViewSet, basename="coupon"
+)  # /api/coupon/
+
 
 urlpatterns = [
-    path('test/', test_view, name='test-api'),
+    path(
+        "course/<str:course_id>/code/<str:code>",
+        CouponRetriveViewByCode.as_view(),
+        name="coupon-by-code",
+    ),
+    path("", include(coupon_router.urls)),
 ]

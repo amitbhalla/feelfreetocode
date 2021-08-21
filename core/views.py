@@ -52,5 +52,16 @@ def api_root(request):
                 "chapter:video-platform-listview", request=request
             ),
         },
+        "Coupon": {
+            "Coupons List (Admin only)": reverse(
+                "coupon:coupon-list", request=request
+            ),
+            "Coupons Detail (Admin only)": reverse(
+                "coupon:coupon-detail", args=[1], request=request
+            ),
+            "Coupons by Code": reverse(
+                "coupon:coupon-by-code", args=[1, 1], request=request
+            ),
+        },
     }
     return Response(response)
