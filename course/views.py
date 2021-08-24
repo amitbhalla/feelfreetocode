@@ -42,6 +42,7 @@ class CourseViewSet(ModelViewSet):
         "price",
         "discount",
         "active",
+        "instructor",
     ]
     search_fields = [
         "title",
