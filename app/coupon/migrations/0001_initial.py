@@ -11,17 +11,39 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ('course', '0001_initial'),
+        ("course", "0001_initial"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='Coupon',
+            name="Coupon",
             fields=[
-                ('id', models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True, serialize=False)),
-                ('discount', models.IntegerField()),
-                ('code', models.CharField(default=coupon.models.random_code, max_length=6, unique=True)),
-                ('course', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='coupans', to='course.course')),
+                (
+                    "id",
+                    models.UUIDField(
+                        default=uuid.uuid4,
+                        editable=False,
+                        primary_key=True,
+                        serialize=False,
+                    ),
+                ),
+                ("discount", models.IntegerField()),
+                (
+                    "code",
+                    models.CharField(
+                        default=coupon.models.random_code,
+                        max_length=6,
+                        unique=True,
+                    ),
+                ),
+                (
+                    "course",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="coupans",
+                        to="course.course",
+                    ),
+                ),
             ],
         ),
     ]

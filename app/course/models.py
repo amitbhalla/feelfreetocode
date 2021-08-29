@@ -27,7 +27,9 @@ class Course(models.Model):
     active = models.BooleanField(default=False)
     discount = models.IntegerField(default=0, null=False)
     duration = models.IntegerField(null=False)
-    category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name="courses")
+    category = models.ForeignKey(
+        Category, on_delete=models.CASCADE, related_name="courses"
+    )
     thumbnail = models.ImageField(upload_to="media/thumbnails")
     resource = models.FileField(upload_to="media/resource")
 
@@ -38,7 +40,9 @@ class Course(models.Model):
 class Tag(models.Model):
     id = models.UUIDField(default=uuid.uuid4, primary_key=True, editable=False)
     tag = models.CharField(max_length=150, null=False)
-    course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name="tags")
+    course = models.ForeignKey(
+        Course, on_delete=models.CASCADE, related_name="tags"
+    )
 
     def __str__(self):
         return self.tag

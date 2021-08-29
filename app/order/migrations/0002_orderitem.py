@@ -8,20 +8,42 @@ import uuid
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('course', '0001_initial'),
-        ('order', '0001_initial'),
+        ("course", "0001_initial"),
+        ("order", "0001_initial"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='OrderItem',
+            name="OrderItem",
             fields=[
-                ('id', models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True, serialize=False)),
-                ('price', models.IntegerField()),
-                ('discount', models.IntegerField(default=0)),
-                ('time', models.DateTimeField(auto_now_add=True)),
-                ('course', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='order_items', to='course.course')),
-                ('order', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='order_items', to='order.order')),
+                (
+                    "id",
+                    models.UUIDField(
+                        default=uuid.uuid4,
+                        editable=False,
+                        primary_key=True,
+                        serialize=False,
+                    ),
+                ),
+                ("price", models.IntegerField()),
+                ("discount", models.IntegerField(default=0)),
+                ("time", models.DateTimeField(auto_now_add=True)),
+                (
+                    "course",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="order_items",
+                        to="course.course",
+                    ),
+                ),
+                (
+                    "order",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="order_items",
+                        to="order.order",
+                    ),
+                ),
             ],
         ),
     ]

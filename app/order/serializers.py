@@ -1,4 +1,4 @@
-from rest_framework.serializers import ModelSerializer, CharField, UUIDField
+from rest_framework.serializers import ModelSerializer, CharField
 
 from .models import Order, OrderItem, Subscription
 from core.serializers import UserSerializer

@@ -9,47 +9,84 @@ class Migration(migrations.Migration):
 
     initial = True
 
-    dependencies = [
-    ]
+    dependencies = []
 
     operations = [
         migrations.CreateModel(
-            name='Category',
+            name="Category",
             fields=[
-                ('id', models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True, serialize=False)),
-                ('title', models.CharField(max_length=150)),
-                ('slug', models.SlugField(unique=True)),
+                (
+                    "id",
+                    models.UUIDField(
+                        default=uuid.uuid4,
+                        editable=False,
+                        primary_key=True,
+                        serialize=False,
+                    ),
+                ),
+                ("title", models.CharField(max_length=150)),
+                ("slug", models.SlugField(unique=True)),
             ],
             options={
-                'verbose_name': 'Category',
-                'verbose_name_plural': 'Categories',
+                "verbose_name": "Category",
+                "verbose_name_plural": "Categories",
             },
         ),
         migrations.CreateModel(
-            name='Course',
+            name="Course",
             fields=[
-                ('id', models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True, serialize=False)),
-                ('title', models.CharField(max_length=150)),
-                ('slug', models.SlugField(unique=True)),
-                ('instructor', models.CharField(max_length=150)),
-                ('language', models.CharField(max_length=150)),
-                ('description', models.TextField(null=True)),
-                ('tagline', models.CharField(max_length=150, null=True)),
-                ('price', models.IntegerField()),
-                ('active', models.BooleanField(default=False)),
-                ('discount', models.IntegerField(default=0)),
-                ('duration', models.IntegerField()),
-                ('thumbnail', models.ImageField(upload_to='media/thumbnails')),
-                ('resource', models.FileField(upload_to='media/resource')),
-                ('category', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='courses', to='course.category')),
+                (
+                    "id",
+                    models.UUIDField(
+                        default=uuid.uuid4,
+                        editable=False,
+                        primary_key=True,
+                        serialize=False,
+                    ),
+                ),
+                ("title", models.CharField(max_length=150)),
+                ("slug", models.SlugField(unique=True)),
+                ("instructor", models.CharField(max_length=150)),
+                ("language", models.CharField(max_length=150)),
+                ("description", models.TextField(null=True)),
+                ("tagline", models.CharField(max_length=150, null=True)),
+                ("price", models.IntegerField()),
+                ("active", models.BooleanField(default=False)),
+                ("discount", models.IntegerField(default=0)),
+                ("duration", models.IntegerField()),
+                ("thumbnail", models.ImageField(upload_to="media/thumbnails")),
+                ("resource", models.FileField(upload_to="media/resource")),
+                (
+                    "category",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="courses",
+                        to="course.category",
+                    ),
+                ),
             ],
         ),
         migrations.CreateModel(
-            name='Tag',
+            name="Tag",
             fields=[
-                ('id', models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True, serialize=False)),
-                ('tag', models.CharField(max_length=150)),
-                ('course', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='tags', to='course.course')),
+                (
+                    "id",
+                    models.UUIDField(
+                        default=uuid.uuid4,
+                        editable=False,
+                        primary_key=True,
+                        serialize=False,
+                    ),
+                ),
+                ("tag", models.CharField(max_length=150)),
+                (
+                    "course",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="tags",
+                        to="course.course",
+                    ),
+                ),
             ],
         ),
     ]
