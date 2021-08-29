@@ -1,0 +1,14 @@
+version: "3.8"
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: app/app.dockerfile
+    volumes:
+      - ./app:/app
+    ports:
+      - 8000:8000
+    command: >
+      sh -c "ls"
+    # sh -c "python manage.py makemigrations && python manage.py migrate && python manage.py runserver && flake8"
