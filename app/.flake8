@@ -1,8 +1,0 @@
-[flake8]
-ignore = E128
-max-line-length = 200
-exclude =
-    migrations
-    __pycache__,
-    manage.py,
-    settings.py

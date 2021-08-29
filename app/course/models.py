@@ -1,5 +1,20 @@
 import uuid
+import os
 from django.db import models
+
+
+def course_image_file_path(instance, filename):
+    """Generate file path for new course image"""
+    ext = filename.split(".")[-1]
+    filename = f"{uuid.uuid4()}.{ext}"
+    return os.path.join("upload/images/", filename)
+
+
+def course_resourse_file_path(instance, filename):
+    """Generate file path for new course resources"""
+    ext = filename.split(".")[-1]
+    filename = f"{uuid.uuid4()}.{ext}"
+    return os.path.join("upload/resources/", filename)
 
 
 class Category(models.Model):
@@ -30,8 +45,8 @@ class Course(models.Model):
     category = models.ForeignKey(
         Category, on_delete=models.CASCADE, related_name="courses"
     )
-    thumbnail = models.ImageField(upload_to="media/thumbnails")
-    resource = models.FileField(upload_to="media/resource")
+    thumbnail = models.ImageField(upload_to=course_image_file_path)
+    resource = models.FileField(upload_to=course_resourse_file_path)
 
     def __str__(self):
         return self.title
